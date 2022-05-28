@@ -26,8 +26,7 @@ class AnimatedText extends StatefulWidget {
   _AnimatedTextState createState() => _AnimatedTextState();
 }
 
-class _AnimatedTextState extends State<AnimatedText>
-    with SingleTickerProviderStateMixin {
+class _AnimatedTextState extends State<AnimatedText> with SingleTickerProviderStateMixin {
   var _newText = '';
   var _oldText = '';
   double? _layoutHeight = 0.0;
@@ -54,7 +53,7 @@ class _AnimatedTextState extends State<AnimatedText>
 
     _oldText = widget.text;
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() => _layoutHeight = getWidgetSize(_textKey)?.height);
     });
   }
@@ -156,17 +155,13 @@ class _AnimatedTextState extends State<AnimatedText>
           if (_animation.value <= MathHelper.toRadian(85))
             Transform(
               alignment: Alignment.center,
-              transform: rollUp
-                  ? _getFrontSideUp(_animation.value)
-                  : _getFrontSideDown(_animation.value),
+              transform: rollUp ? _getFrontSideUp(_animation.value) : _getFrontSideDown(_animation.value),
               child: oldText,
             ),
           if (_animation.value >= MathHelper.toRadian(5))
             Transform(
               alignment: Alignment.center,
-              transform: rollUp
-                  ? _getBackSideUp(_animation.value)
-                  : _getBackSideDown(_animation.value),
+              transform: rollUp ? _getBackSideUp(_animation.value) : _getBackSideDown(_animation.value),
               child: newText,
             ),
         ],

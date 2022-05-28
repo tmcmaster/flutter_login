@@ -25,8 +25,7 @@ class _RecoverCard extends StatefulWidget {
   _RecoverCardState createState() => _RecoverCardState();
 }
 
-class _RecoverCardState extends State<_RecoverCard>
-    with SingleTickerProviderStateMixin {
+class _RecoverCardState extends State<_RecoverCard> with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formRecoverKey = GlobalKey();
 
   bool _isSubmitting = false;
@@ -72,16 +71,14 @@ class _RecoverCardState extends State<_RecoverCard>
       await _submitController.reverse();
       return false;
     } else {
-      showSuccessToast(context, messages.flushbarTitleSuccess,
-          messages.recoverPasswordSuccess);
+      showSuccessToast(context, messages.flushbarTitleSuccess, messages.recoverPasswordSuccess);
       setState(() => _isSubmitting = false);
       widget.onSubmitCompleted();
       return true;
     }
   }
 
-  Widget _buildRecoverNameField(
-      double width, LoginMessages messages, Auth auth) {
+  Widget _buildRecoverNameField(double width, LoginMessages messages, Auth auth) {
     return AnimatedTextFormField(
       controller: _nameController,
       loadingController: widget.loadingController,
@@ -105,12 +102,8 @@ class _RecoverCardState extends State<_RecoverCard>
     );
   }
 
-  Widget _buildBackButton(
-      ThemeData theme, LoginMessages messages, LoginTheme? loginTheme) {
-    final calculatedTextColor =
-        (theme.cardTheme.color!.computeLuminance() < 0.5)
-            ? Colors.white
-            : theme.primaryColor;
+  Widget _buildBackButton(ThemeData theme, LoginMessages messages, LoginTheme? loginTheme) {
+    final calculatedTextColor = (theme.cardTheme.color!.computeLuminance() < 0.5) ? Colors.white : theme.primaryColor;
     return MaterialButton(
       onPressed: !_isSubmitting
           ? () {

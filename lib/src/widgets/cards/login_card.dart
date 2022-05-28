@@ -103,10 +103,8 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
 
     _nameTextFieldLoadingAnimationInterval = const Interval(0, .85);
     _passTextFieldLoadingAnimationInterval = const Interval(.15, 1.0);
-    _textButtonLoadingAnimationInterval =
-        const Interval(.6, 1.0, curve: Curves.easeOut);
-    _buttonScaleAnimation =
-        Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+    _textButtonLoadingAnimationInterval = const Interval(.6, 1.0, curve: Curves.easeOut);
+    _buttonScaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       parent: widget.loadingController,
       curve: const Interval(.4, 1.0, curve: Curves.easeOutBack),
     ));
@@ -176,9 +174,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     } else {
       if (!widget.requireAdditionalSignUpFields) {
         error = await auth.onSignup!(SignupData.fromSignupForm(
-            name: auth.email,
-            password: auth.password,
-            termsOfService: auth.getTermsOfServiceResults()));
+            name: auth.email, password: auth.password, termsOfService: auth.getTermsOfServiceResults()));
       }
     }
 
@@ -214,8 +210,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
         _switchAuthMode();
         return false;
       } else if (!widget.loginAfterSignUp) {
-        showSuccessToast(
-            context, messages.flushbarTitleSuccess, messages.signUpSuccess);
+        showSuccessToast(context, messages.flushbarTitleSuccess, messages.signUpSuccess);
         _switchAuthMode();
         setState(() => _isSubmitting = false);
         return false;
@@ -227,9 +222,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     return true;
   }
 
-  Future<bool> _loginProviderSubmit(
-      {required LoginProvider loginProvider,
-      AnimationController? control}) async {
+  Future<bool> _loginProviderSubmit({required LoginProvider loginProvider, AnimationController? control}) async {
     if (!loginProvider.animated) {
       String? error = await loginProvider.callback();
 
@@ -275,8 +268,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       return false;
     }
 
-    final showSignupAdditionalFields =
-        await loginProvider.providerNeedsSignUpCallback?.call() ?? false;
+    final showSignupAdditionalFields = await loginProvider.providerNeedsSignUpCallback?.call() ?? false;
 
     if (showSignupAdditionalFields) {
       widget.onSwitchSignUpAdditionalData();
@@ -297,11 +289,8 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       width: width,
       loadingController: widget.loadingController,
       interval: _nameTextFieldLoadingAnimationInterval,
-      labelText:
-          messages.userHint ?? TextFieldUtils.getLabelText(widget.userType),
-      autofillHints: _isSubmitting
-          ? null
-          : [TextFieldUtils.getAutofillHints(widget.userType)],
+      labelText: messages.userHint ?? TextFieldUtils.getLabelText(widget.userType),
+      autofillHints: _isSubmitting ? null : [TextFieldUtils.getAutofillHints(widget.userType)],
       prefixIcon: TextFieldUtils.getPrefixIcon(widget.userType),
       keyboardType: TextFieldUtils.getKeyboardType(widget.userType),
       textInputAction: TextInputAction.next,
@@ -320,14 +309,9 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       loadingController: widget.loadingController,
       interval: _passTextFieldLoadingAnimationInterval,
       labelText: messages.passwordHint,
-      autofillHints: _isSubmitting
-          ? null
-          : (auth.isLogin
-              ? [AutofillHints.password]
-              : [AutofillHints.newPassword]),
+      autofillHints: _isSubmitting ? null : (auth.isLogin ? [AutofillHints.password] : [AutofillHints.newPassword]),
       controller: _passController,
-      textInputAction:
-          auth.isLogin ? TextInputAction.done : TextInputAction.next,
+      textInputAction: auth.isLogin ? TextInputAction.done : TextInputAction.next,
       focusNode: _passwordFocusNode,
       onFieldSubmitted: (value) {
         if (auth.isLogin) {
@@ -343,8 +327,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildConfirmPasswordField(
-      double width, LoginMessages messages, Auth auth) {
+  Widget _buildConfirmPasswordField(double width, LoginMessages messages, Auth auth) {
     return AnimatedPasswordTextFormField(
       animatedWidth: width,
       enabled: auth.isSignup,
@@ -384,15 +367,14 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
             : null,
         child: Text(
           messages.forgotPasswordButton,
-          style: theme.textTheme.bodyText2,
+          style: theme.textTheme.bodyText2?.copyWith(decoration: TextDecoration.underline),
           textAlign: TextAlign.left,
         ),
       ),
     );
   }
 
-  Widget _buildSubmitButton(
-      ThemeData theme, LoginMessages messages, Auth auth) {
+  Widget _buildSubmitButton(ThemeData theme, LoginMessages messages, Auth auth) {
     return ScaleTransition(
       scale: _buttonScaleAnimation,
       child: AnimatedButton(
@@ -403,12 +385,8 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildSwitchAuthButton(ThemeData theme, LoginMessages messages,
-      Auth auth, LoginTheme loginTheme) {
-    final calculatedTextColor =
-        (theme.cardTheme.color!.computeLuminance() < 0.5)
-            ? Colors.white
-            : theme.primaryColor;
+  Widget _buildSwitchAuthButton(ThemeData theme, LoginMessages messages, Auth auth, LoginTheme loginTheme) {
+    final calculatedTextColor = (theme.cardTheme.color!.computeLuminance() < 0.5) ? Colors.white : theme.primaryColor;
     return FadeIn(
       controller: widget.loadingController,
       offset: .5,
@@ -417,8 +395,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       child: MaterialButton(
         disabledTextColor: theme.primaryColor,
         onPressed: buttonEnabled ? _switchAuthMode : null,
-        padding: loginTheme.authButtonPadding ??
-            const EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
+        padding: loginTheme.authButtonPadding ?? const EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         textColor: loginTheme.switchAuthTextColor ?? calculatedTextColor,
         child: AnimatedText(
@@ -459,8 +436,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
   //       }).toList());
   // }
 
-  Widget _buildProvidersLogInButton(ThemeData theme, LoginMessages messages,
-      Auth auth, LoginTheme loginTheme) {
+  Widget _buildProvidersLogInButton(ThemeData theme, LoginMessages messages, Auth auth, LoginTheme loginTheme) {
     var buttonProvidersList = <LoginProvider>[];
     var iconProvidersList = <LoginProvider>[];
     for (var loginProvider in auth.loginProviders) {
@@ -484,9 +460,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
       return Column(
         children: [
           _buildButtonColumn(theme, messages, buttonProvidersList, loginTheme),
-          iconProvidersList.isNotEmpty
-              ? _buildProvidersTitleSecond(messages)
-              : Container(),
+          iconProvidersList.isNotEmpty ? _buildProvidersTitleSecond(messages) : Container(),
           _buildIconRow(theme, messages, iconProvidersList, loginTheme),
         ],
       );
@@ -496,14 +470,13 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     return Container();
   }
 
-  Widget _buildButtonColumn(ThemeData theme, LoginMessages messages,
-      List<LoginProvider> buttonProvidersList, LoginTheme loginTheme) {
+  Widget _buildButtonColumn(
+      ThemeData theme, LoginMessages messages, List<LoginProvider> buttonProvidersList, LoginTheme loginTheme) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: buttonProvidersList.map((loginProvider) {
         return Padding(
-          padding: loginTheme.providerButtonPadding ??
-              const EdgeInsets.symmetric(horizontal: 6.0, vertical: 8.0),
+          padding: loginTheme.providerButtonPadding ?? const EdgeInsets.symmetric(horizontal: 6.0, vertical: 8.0),
           child: ScaleTransition(
             scale: _buttonScaleAnimation,
             child: SignInButton(
@@ -520,14 +493,13 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildIconRow(ThemeData theme, LoginMessages messages,
-      List<LoginProvider> iconProvidersList, LoginTheme loginTheme) {
+  Widget _buildIconRow(
+      ThemeData theme, LoginMessages messages, List<LoginProvider> iconProvidersList, LoginTheme loginTheme) {
     return Wrap(
       children: iconProvidersList.map((loginProvider) {
         var index = iconProvidersList.indexOf(loginProvider);
         return Padding(
-          padding: loginTheme.providerButtonPadding ??
-              const EdgeInsets.symmetric(horizontal: 6.0, vertical: 8.0),
+          padding: loginTheme.providerButtonPadding ?? const EdgeInsets.symmetric(horizontal: 6.0, vertical: 8.0),
           child: ScaleTransition(
               scale: _buttonScaleAnimation,
               child: Column(
@@ -608,13 +580,9 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
             ),
           ),
           ExpandableContainer(
-            backgroundColor: _switchAuthController.isCompleted
-                ? null
-                : theme.colorScheme.secondary,
+            backgroundColor: _switchAuthController.isCompleted ? null : theme.colorScheme.secondary,
             controller: _switchAuthController,
-            initialState: isLogin
-                ? ExpandableContainerState.shrunk
-                : ExpandableContainerState.expanded,
+            initialState: isLogin ? ExpandableContainerState.shrunk : ExpandableContainerState.expanded,
             alignment: Alignment.topLeft,
             color: theme.cardTheme.color,
             width: cardWidth,
@@ -623,8 +591,7 @@ class _LoginCardState extends State<_LoginCard> with TickerProviderStateMixin {
             child: Column(children: [
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child:
-                    _buildConfirmPasswordField(textFieldWidth, messages, auth),
+                child: _buildConfirmPasswordField(textFieldWidth, messages, auth),
               ),
               for (var e in auth.termsOfService)
                 TermCheckbox(
